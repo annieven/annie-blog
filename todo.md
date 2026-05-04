@@ -1,0 +1,48 @@
+# Annie Blog - 開發進度
+
+## 資料庫結構
+- [x] 建立 posts 表（id, title, content, createdAt, updatedAt, authorId）
+- [x] 建立 post_images 表（id, postId, imageUrl, imageKey, order）
+- [x] 建立 post_tags 表（id, postId, tag）
+- [x] 執行資料庫遷移
+
+## 後端 API
+- [x] 實現 posts.list 查詢（支援 tag 篩選）
+- [x] 實現 posts.getById 查詢
+- [x] 實現 posts.create 新增文章（需認證）
+- [x] 實現 posts.update 編輯文章（需認證）
+- [x] 實現 posts.delete 刪除文章（需認證）
+- [x] 實現 images.upload 上傳圖片（需認證）
+- [x] 實現 tags.list 列出所有標籤
+
+## 前端首頁
+- [x] 設計極簡白底風格的首頁佈局
+- [x] 實現文章列表展示（依發布時間倒序）
+- [x] 實現 HashTag 顯示與點擊篩選功能
+- [x] 實現標籤篩選後的文章列表更新
+- [x] 添加導航到文章詳細頁面
+
+## 文章詳細頁面
+- [x] 實現文章詳細頁面佈局
+- [x] 顯示文章完整內容、所有圖片、標籤
+- [x] 實現返回首頁導航
+
+## 後台管理介面
+- [x] 設計後台管理佈局（需登入驗證）
+- [x] 實現文章新增表單（支援多張圖片上傳、標籤輸入）
+- [x] 實現文章編輯表單
+- [x] 實現文章刪除功能（含確認對話框）
+- [x] 實現後台文章列表管理
+
+## 測試與優化
+- [x] 編寫 vitest 單元測試（後端 API）
+- [x] 測試所有 CRUD 操作
+- [x] 測試標籤篩選功能
+- [x] 修正 HashTag 篩選流程（首頁讀取 URL 參數）
+- [x] 修正後台圖片上傳流程（先建立文章再上傳）
+- [x] 測試標籤篩選功能（posts.list with tag filter）
+
+## 部署與交付
+- [ ] 建立檢查點
+- [ ] 驗證網址包含 "annie" 字樣
+- [ ] 向使用者展示成果

@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, desc, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, posts, postImages, postTags, InsertPost, InsertPostImage, InsertPostTag } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,115 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Posts queries
+export async function listPosts(tag?: string) {
+  const db = await getDb();
+  if (!db) return [];
+
+  if (tag) {
+    const postsWithTag = await db
+      .select({ postId: postTags.postId })
+      .from(postTags)
+      .where(eq(postTags.tag, tag));
+    
+    const postIds = postsWithTag.map(p => p.postId);
+    if (postIds.length === 0) return [];
+    
+    return db
+      .select()
+      .from(posts)
+      .where(inArray(posts.id, postIds))
+      .orderBy(desc(posts.createdAt));
+  }
+
+  return db.select().from(posts).orderBy(desc(posts.createdAt));
+}
+
+export async function getPostById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db.select().from(posts).where(eq(posts.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function createPost(data: InsertPost) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(posts).values(data);
+  return result;
+}
+
+export async function updatePost(id: number, data: Partial<InsertPost>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return db.update(posts).set(data).where(eq(posts.id, id));
+}
+
+export async function deletePost(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.delete(postImages).where(eq(postImages.postId, id));
+  await db.delete(postTags).where(eq(postTags.postId, id));
+  
+  return db.delete(posts).where(eq(posts.id, id));
+}
+
+// Post images queries
+export async function getPostImages(postId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db
+    .select()
+    .from(postImages)
+    .where(eq(postImages.postId, postId))
+    .orderBy(postImages.order);
+}
+
+export async function addPostImage(data: InsertPostImage) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return db.insert(postImages).values(data);
+}
+
+export async function deletePostImage(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return db.delete(postImages).where(eq(postImages.id, id));
+}
+
+// Post tags queries
+export async function getPostTags(postId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.select().from(postTags).where(eq(postTags.postId, postId));
+}
+
+export async function addPostTag(data: InsertPostTag) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return db.insert(postTags).values(data);
+}
+
+export async function deletePostTag(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return db.delete(postTags).where(eq(postTags.id, id));
+}
+
+export async function getAllTags() {
+  const db = await getDb();
+  if (!db) return [];
+
+  const result = await db.selectDistinct({ tag: postTags.tag }).from(postTags);
+  return result.map(r => r.tag).sort();
+}
