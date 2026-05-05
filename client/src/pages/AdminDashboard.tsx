@@ -38,8 +38,10 @@ export default function AdminDashboard() {
   // Queries
   const { data: posts = [], refetch: refetchPosts } = trpc.posts.list.useQuery();
   
-  // Filter posts to show only current user's posts
-  const userPosts = posts.filter((post) => post.authorId === user?.id);
+  // Filter posts: admin sees all posts, regular users see only their own
+  const userPosts = user?.role === 'admin' 
+    ? posts 
+    : posts.filter((post) => post.authorId === user?.id);
   
   // Get edit post ID from URL query parameter
   const editPostIdFromUrl = (() => {
