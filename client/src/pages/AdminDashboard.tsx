@@ -60,7 +60,7 @@ export default function AdminDashboard() {
   // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      window.location.href = getLoginUrl();
+      window.location.href = getLoginUrl('/admin');
     }
   }, [isAuthenticated]);
   
