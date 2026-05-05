@@ -17,7 +17,7 @@ interface UploadedImage {
 
 export default function AdminDashboard() {
   const { user, isAuthenticated } = useAuth();
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
 
   // Form state
@@ -37,6 +37,20 @@ export default function AdminDashboard() {
 
   // Queries
   const { data: posts = [], refetch: refetchPosts } = trpc.posts.list.useQuery();
+  
+  // Get edit post ID from URL query parameter
+  const editPostIdFromUrl = (() => {
+    if (typeof window === 'undefined') return null;
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('edit');
+    return id ? parseInt(id, 10) : null;
+  })();
+  
+  // Fetch the post to edit if edit ID is in URL
+  const { data: postToEdit } = trpc.posts.getById.useQuery(
+    { id: editPostIdFromUrl || 0 },
+    { enabled: !!editPostIdFromUrl }
+  );
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -44,6 +58,23 @@ export default function AdminDashboard() {
       window.location.href = getLoginUrl();
     }
   }, [isAuthenticated]);
+  
+  // Load post data when editing from URL
+  useEffect(() => {
+    if (editPostIdFromUrl && postToEdit) {
+      setEditingPostId(postToEdit.id);
+      setTitle(postToEdit.title);
+      setContent(postToEdit.content);
+      setTags(postToEdit.tags?.join(", ") || "");
+      setUploadedImages(
+        postToEdit.images?.map((img) => ({
+          id: img.id,
+          url: img.imageUrl,
+          key: img.imageKey,
+        })) || []
+      );
+    }
+  }, [editPostIdFromUrl, postToEdit]);
 
   const handleImageUpload = async (
     e: React.ChangeEvent<HTMLInputElement>
@@ -323,6 +354,7 @@ export default function AdminDashboard() {
                         setContent("");
                         setTags("");
                         setUploadedImages([]);
+                        setLocation("/admin");
                       }}
                     >
                       Cancel
