@@ -64,17 +64,25 @@ export default function PostDetail({ params }: PostDetailProps) {
             {post.title}
           </h1>
           <div className="flex items-center justify-between">
-            <p className="text-gray-500 text-sm">
-              {new Date(post.createdAt).toLocaleDateString("zh-TW", {
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })}
-            </p>
+            <div>
+              <p className="text-gray-500 text-sm">
+                {new Date(post.createdAt).toLocaleDateString("zh-TW", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })}
+              </p>
+              {(post as any).author && (
+                <p className="text-gray-400 text-xs mt-1">
+                  By {(post as any).author.name || "Anonymous"}
+                </p>
+              )}
+            </div>
             {isAuthor && (
+              <>
               <div className="flex gap-2">
                 <Button
                   onClick={() => setLocation(`/admin?edit=${post.id}`)}
@@ -84,6 +92,7 @@ export default function PostDetail({ params }: PostDetailProps) {
                   Edit
                 </Button>
               </div>
+              </>
             )}
           </div>
         </div>
@@ -124,7 +133,7 @@ export default function PostDetail({ params }: PostDetailProps) {
           <div className="border-t border-gray-200 pt-8">
             <h2 className="text-lg font-light text-gray-900 mb-4">Tags</h2>
             <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
+              {post.tags.map((tag: string) => (
                 <a
                   key={tag}
                   href={`/?tag=${encodeURIComponent(tag)}`}

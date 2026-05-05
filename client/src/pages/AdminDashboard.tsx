@@ -377,6 +377,11 @@ export default function AdminDashboard() {
                             hour12: false,
                           })}
                         </p>
+                        {(post as any).author && (
+                          <p className="text-xs text-gray-400 mt-1">
+                            By {(post as any).author.name || "Anonymous"}
+                          </p>
+                        )}
                       </button>
                       <button
                         onClick={() => handleDeletePost(post.id)}

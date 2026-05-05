@@ -1,6 +1,6 @@
 import { eq, desc, inArray } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, posts, postImages, postTags, InsertPost, InsertPostImage, InsertPostTag } from "../drizzle/schema";
+import { InsertUser, users, posts, postImages, postTags, InsertPost, InsertPostImage, InsertPostTag, User, Post } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -100,17 +100,42 @@ export async function listPosts(tag?: string) {
       .from(postTags)
       .where(eq(postTags.tag, tag));
     
-    const postIds = postsWithTag.map(p => p.postId);
+    const postIds = postsWithTag.map((p: any) => p.postId);
     if (postIds.length === 0) return [];
     
-    return db
+    const results = await db
       .select()
       .from(posts)
       .where(inArray(posts.id, postIds))
       .orderBy(desc(posts.createdAt));
+    
+    return enrichPostsWithAuthor(results);
   }
 
-  return db.select().from(posts).orderBy(desc(posts.createdAt));
+  const results = await db.select().from(posts).orderBy(desc(posts.createdAt));
+  return enrichPostsWithAuthor(results);
+}
+
+async function enrichPostsWithAuthor(postsArray: Post[]) {
+  const db = await getDb();
+  if (!db) return postsArray;
+
+  const authorMap = new Map<number, User>();
+  
+  // Fetch all unique authors
+  const authorIds = Array.from(new Set(postsArray.map(p => p.authorId)));
+  for (const authorId of authorIds) {
+    const author = await db.select().from(users).where(eq(users.id, authorId)).limit(1);
+    if (author.length > 0) {
+      authorMap.set(authorId, author[0]);
+    }
+  }
+
+  // Attach author info to posts
+  return postsArray.map(post => ({
+    ...post,
+    author: authorMap.get(post.authorId),
+  }));
 }
 
 export async function getPostById(id: number) {
@@ -118,7 +143,10 @@ export async function getPostById(id: number) {
   if (!db) return undefined;
 
   const result = await db.select().from(posts).where(eq(posts.id, id)).limit(1);
-  return result.length > 0 ? result[0] : undefined;
+  if (result.length === 0) return undefined;
+  
+  const enriched = await enrichPostsWithAuthor([result[0]]);
+  return enriched[0];
 }
 
 export async function createPost(data: InsertPost) {

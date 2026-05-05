@@ -6,6 +6,23 @@ import { useState, useMemo, useEffect } from "react";
 import { getLoginUrl } from "@/const";
 import { Loader2, Plus } from "lucide-react";
 
+interface PostWithAuthor {
+  id: number;
+  title: string;
+  content: string;
+  createdAt: Date;
+  authorId: number;
+  updatedAt: Date;
+  tags?: string[];
+  images?: any[];
+  author?: {
+    id: number;
+    name: string | null;
+    email: string | null;
+    openId: string;
+  };
+}
+
 export default function Home() {
   const { user, isAuthenticated } = useAuth();
   const [location, setLocation] = useLocation();
@@ -138,16 +155,25 @@ export default function Home() {
                   <h2 className="text-3xl font-light text-gray-900 mb-2">
                     {post.title}
                   </h2>
-                  <p className="text-gray-500 text-sm">
-                    {new Date(post.createdAt).toLocaleDateString("zh-TW", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: false,
-                    })}
-                  </p>
+                  <div className="flex items-center justify-between text-gray-500 text-sm">
+                    <div>
+                      <p>
+                        {new Date(post.createdAt).toLocaleDateString("zh-TW", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: false,
+                        })}
+                      </p>
+                      {(post as any).author && (
+                        <p className="text-xs text-gray-400 mt-1">
+                          By {(post as any).author.name || "Anonymous"}
+                        </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Post Preview */}
