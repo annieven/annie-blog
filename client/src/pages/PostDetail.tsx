@@ -76,9 +76,12 @@ export default function PostDetail({ params }: PostDetailProps) {
                 })}
               </p>
               {(post as any).author && (
-                <p className="text-gray-400 text-xs mt-1">
+                <a
+                  href={`/authors/${(post as any).author.id}`}
+                  className="text-gray-400 text-xs mt-1 hover:text-gray-600 transition-colors block"
+                >
                   By {(post as any).author.name || "Anonymous"}
-                </p>
+                </a>
               )}
             </div>
             {isAuthor && (

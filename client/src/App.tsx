@@ -7,12 +7,14 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import PostDetail from "./pages/PostDetail";
 import AdminDashboard from "./pages/AdminDashboard";
+import AuthorPage from "./pages/AuthorPage";
 
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      <Route path={"/ "} component={Home} />
       <Route path={"/posts/:id"} component={PostDetail} />
+      <Route path={"/authors/:authorId"} component={AuthorPage} />
       <Route path={"/admin"} component={AdminDashboard} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}

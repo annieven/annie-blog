@@ -168,9 +168,13 @@ export default function Home() {
                         })}
                       </p>
                       {(post as any).author && (
-                        <p className="text-xs text-gray-400 mt-1">
+                        <a
+                          href={`/authors/${(post as any).author.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-xs text-gray-400 mt-1 hover:text-gray-600 transition-colors block"
+                        >
                           By {(post as any).author.name || "Anonymous"}
-                        </p>
+                        </a>
                       )}
                     </div>
                   </div>

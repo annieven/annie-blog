@@ -1,4 +1,6 @@
 import { COOKIE_NAME } from "@shared/const";
+import { eq, desc } from "drizzle-orm";
+import { posts } from "../drizzle/schema";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
@@ -16,6 +18,8 @@ import {
   addPostTag,
   deletePostTag,
   getAllTags,
+  getDb,
+  enrichPostsWithAuthor,
 } from "./db";
 import { storagePut } from "./storage";
 
@@ -71,6 +75,38 @@ export const appRouter = router({
           images,
           tags: tags.map(t => t.tag),
         };
+      }),
+
+    // Get all posts by author ID
+    getByAuthorId: publicProcedure
+      .input(z.object({ authorId: z.number() }))
+      .query(async ({ input }) => {
+        const db = await getDb();
+        if (!db) return [];
+        
+        const authorPosts = await db
+          .select()
+          .from(posts)
+          .where(eq(posts.authorId, input.authorId))
+          .orderBy(desc(posts.createdAt));
+        
+        // Enrich with author info
+        const enriched = await enrichPostsWithAuthor(authorPosts);
+        
+        // Fetch images and tags for each post
+        const postsWithDetails = await Promise.all(
+          enriched.map(async (post: any) => {
+            const images = await getPostImages(post.id);
+            const tags = await getPostTags(post.id);
+            return {
+              ...post,
+              images,
+              tags: tags.map((t: any) => t.tag),
+            };
+          })
+        );
+        
+        return postsWithDetails;
       }),
 
     // Create a new post (protected)

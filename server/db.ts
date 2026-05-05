@@ -116,7 +116,7 @@ export async function listPosts(tag?: string) {
   return enrichPostsWithAuthor(results);
 }
 
-async function enrichPostsWithAuthor(postsArray: Post[]) {
+export async function enrichPostsWithAuthor(postsArray: Post[]) {
   const db = await getDb();
   if (!db) return postsArray;
 
