@@ -38,6 +38,9 @@ export default function AdminDashboard() {
   // Queries
   const { data: posts = [], refetch: refetchPosts } = trpc.posts.list.useQuery();
   
+  // Filter posts to show only current user's posts
+  const userPosts = posts.filter((post) => post.authorId === user?.id);
+  
   // Get edit post ID from URL query parameter
   const editPostIdFromUrl = (() => {
     if (typeof window === 'undefined') return null;
@@ -372,10 +375,10 @@ export default function AdminDashboard() {
                 Your Posts
               </h2>
               <div className="space-y-3 max-h-96 overflow-y-auto">
-                {posts.length === 0 ? (
+                {userPosts.length === 0 ? (
                   <p className="text-sm text-gray-500">No posts yet</p>
                 ) : (
-                  posts.map((post) => (
+                  userPosts.map((post) => (
                     <div
                       key={post.id}
                       className="border border-gray-200 rounded-lg p-3 hover:bg-gray-50"
