@@ -12,7 +12,7 @@ import AuthorPage from "./pages/AuthorPage";
 function Router() {
   return (
     <Switch>
-      <Route path={"/ "} component={Home} />
+      <Route path={"/"} component={Home} />
       <Route path={"/posts/:id"} component={PostDetail} />
       <Route path={"/authors/:authorId"} component={AuthorPage} />
       <Route path={"/admin"} component={AdminDashboard} />
