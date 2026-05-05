@@ -46,3 +46,6 @@
 - [x] 建立檢查點
 - [x] 驗證網址包含 "annie" 字樣（專案名稱 annie-blog）
 - [x] 向使用者展示成果
+
+## Bug 修復
+- [x] 修正刪除權限 Bug：允許 admin 刪除任何文章（第 193-196 行 server/routers.ts）

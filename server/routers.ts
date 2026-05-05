@@ -190,7 +190,10 @@ export const appRouter = router({
       .mutation(async ({ input, ctx }) => {
         const post = await getPostById(input.id);
         if (!post) throw new Error("Post not found");
-        if (post.authorId !== ctx.user.id) throw new Error("Unauthorized");
+        // Allow deletion if user is the author OR is an admin
+        if (post.authorId !== ctx.user.id && ctx.user.role !== 'admin') {
+          throw new Error("Unauthorized");
+        }
         
         await deletePost(input.id);
         return { success: true };
