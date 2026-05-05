@@ -368,7 +368,14 @@ export default function AdminDashboard() {
                           {post.title}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {new Date(post.createdAt).toLocaleDateString()}
+                          {new Date(post.createdAt).toLocaleDateString("zh-TW", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: false,
+                          })}
                         </p>
                       </button>
                       <button

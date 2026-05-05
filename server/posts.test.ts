@@ -271,38 +271,39 @@ describe("posts router", () => {
       const ctx = createAuthContext(1);
       const caller = appRouter.createCaller(ctx);
 
-      // Create posts with different tags
+      // Create posts with different tags using unique identifiers
+      const timestamp = Date.now();
       await caller.posts.create({
-        title: "Filter Test Travel Post 1",
+        title: `Filter Test Travel Post 1 ${timestamp}`,
         content: "Content 1",
-        tags: ["#filter-test-travel", "#photography"],
+        tags: [`#filter-test-travel-${timestamp}`, "#photography"],
       });
 
       await caller.posts.create({
-        title: "Filter Test Life Post",
+        title: `Filter Test Life Post ${timestamp}`,
         content: "Content 2",
-        tags: ["#filter-test-life"],
+        tags: [`#filter-test-life-${timestamp}`],
       });
 
       await caller.posts.create({
-        title: "Filter Test Travel Post 2",
+        title: `Filter Test Travel Post 2 ${timestamp}`,
         content: "Content 3",
-        tags: ["#filter-test-travel"],
+        tags: [`#filter-test-travel-${timestamp}`],
       });
 
-      // Get posts with #filter-test-travel tag
-      const travelPosts = await caller.posts.list({ tag: "#filter-test-travel" });
+      // Get posts with the unique travel tag
+      const travelPosts = await caller.posts.list({ tag: `#filter-test-travel-${timestamp}` });
       expect(travelPosts.length).toBe(2);
-      expect(travelPosts.some((p) => p.title === "Filter Test Travel Post 1")).toBe(true);
-      expect(travelPosts.some((p) => p.title === "Filter Test Travel Post 2")).toBe(true);
+      expect(travelPosts.some((p) => p.title.includes("Filter Test Travel Post 1"))).toBe(true);
+      expect(travelPosts.some((p) => p.title.includes("Filter Test Travel Post 2"))).toBe(true);
 
-      // Get posts with #filter-test-life tag
-      const lifePosts = await caller.posts.list({ tag: "#filter-test-life" });
+      // Get posts with the unique life tag
+      const lifePosts = await caller.posts.list({ tag: `#filter-test-life-${timestamp}` });
       expect(lifePosts.length).toBe(1);
-      expect(lifePosts[0]?.title).toBe("Filter Test Life Post");
+      expect(lifePosts[0]?.title.includes("Filter Test Life Post")).toBe(true);
 
       // Get posts with non-existent tag
-      const noPosts = await caller.posts.list({ tag: "#nonexistent-filter-test" });
+      const noPosts = await caller.posts.list({ tag: "#nonexistent-filter-test-xyz" });
       expect(noPosts.length).toBe(0);
     });
   });

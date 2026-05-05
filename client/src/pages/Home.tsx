@@ -141,8 +141,11 @@ export default function Home() {
                   <p className="text-gray-500 text-sm">
                     {new Date(post.createdAt).toLocaleDateString("zh-TW", {
                       year: "numeric",
-                      month: "long",
-                      day: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: false,
                     })}
                   </p>
                 </div>
