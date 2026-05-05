@@ -137,7 +137,7 @@ export default function Home() {
       {/* Main Content with Sidebar */}
       <div className="flex-1 flex">
         {/* Main Posts Area */}
-        <main className="flex-1 container py-12">
+        <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
           {isLoading ? (
             <div className="flex justify-center items-center py-20">
               <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
@@ -149,7 +149,7 @@ export default function Home() {
               </p>
             </div>
           ) : (
-            <div className="space-y-12 pr-8">
+            <div className="space-y-12">
               {posts.map((post) => (
                 <article
                   key={post.id}
