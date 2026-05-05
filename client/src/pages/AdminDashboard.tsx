@@ -409,6 +409,18 @@ export default function AdminDashboard() {
                             hour12: false,
                           })}
                         </p>
+                        {post.updatedAt && new Date(post.updatedAt).getTime() !== new Date(post.createdAt).getTime() && (
+                          <p className="text-xs text-gray-400 mt-1">
+                            Updated: {new Date(post.updatedAt).toLocaleDateString("zh-TW", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: false,
+                            })}
+                          </p>
+                        )}
                         {(post as any).author && (
                           <p className="text-xs text-gray-400 mt-1">
                             By {(post as any).author.name || "Anonymous"}

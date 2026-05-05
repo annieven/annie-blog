@@ -75,6 +75,18 @@ export default function PostDetail({ params }: PostDetailProps) {
                   hour12: false,
                 })}
               </p>
+              {post.updatedAt && new Date(post.updatedAt).getTime() !== new Date(post.createdAt).getTime() && (
+                <p className="text-gray-400 text-xs mt-1">
+                  Last updated: {new Date(post.updatedAt).toLocaleDateString("zh-TW", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })}
+                </p>
+              )}
               {(post as any).author && (
                 <a
                   href={`/authors/${(post as any).author.id}`}
