@@ -37,12 +37,13 @@ export const appRouter = router({
   }),
 
   posts: router({
-    // Get all posts, optionally filtered by tag
+    // Get all posts, optionally filtered by tag or search query
     list: publicProcedure
-      .input(z.object({ tag: z.string().optional() }).optional())
+      .input(z.object({ tag: z.string().optional(), search: z.string().optional() }).optional())
       .query(async ({ input }) => {
         const tag = input?.tag;
-        const allPosts = await listPosts(tag);
+        const search = input?.search;
+        const allPosts = await listPosts(tag, search);
         
         // Fetch images and tags for each post
         const postsWithDetails = await Promise.all(

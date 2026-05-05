@@ -1,10 +1,11 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 import { useState, useMemo, useEffect } from "react";
 import { getLoginUrl } from "@/const";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, Search, X } from "lucide-react";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 interface PostWithAuthor {
   id: number;
@@ -27,6 +28,8 @@ export default function Home() {
   const { user, isAuthenticated } = useAuth();
   const [location, setLocation] = useLocation();
   const [selectedTag, setSelectedTag] = useState<string | undefined>();
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isSearching, setIsSearching] = useState(false);
 
   // Read tag from URL query parameter
   useEffect(() => {
@@ -37,13 +40,26 @@ export default function Home() {
     }
   }, [location]);
 
-  // Fetch all posts (optionally filtered by tag)
+  // Fetch all posts (optionally filtered by tag or search)
   const { data: posts = [], isLoading } = trpc.posts.list.useQuery({
     tag: selectedTag,
+    search: isSearching ? searchQuery : undefined,
   });
 
   // Fetch all available tags
   const { data: allTags = [] } = trpc.tags.list.useQuery();
+
+  // Handle search
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setIsSearching(query.length > 0);
+    setSelectedTag(undefined); // Clear tag filter when searching
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setIsSearching(false);
+  };
 
   // Get unique tags from posts for display
   const displayTags = useMemo(() => {
@@ -67,9 +83,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b border-gray-200">
+      <header className="border-b border-gray-200 sticky top-0 z-50 bg-white">
         <div className="container py-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-4xl font-light text-gray-900">Annie's Blog</h1>
               <p className="text-gray-500 mt-2">A personal collection of thoughts and moments</p>
@@ -93,6 +109,28 @@ export default function Home() {
                 >
                   Sign In
                 </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="Search articles by title or content..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                className="w-full pl-10 pr-10 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300"
+              />
+              {searchQuery && (
+                <button
+                  onClick={clearSearch}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               )}
             </div>
           </div>

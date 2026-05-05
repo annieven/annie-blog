@@ -1,4 +1,4 @@
-import { eq, desc, inArray } from "drizzle-orm";
+import { eq, desc, inArray, like, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, posts, postImages, postTags, InsertPost, InsertPostImage, InsertPostTag, User, Post } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -90,7 +90,7 @@ export async function getUserByOpenId(openId: string) {
 }
 
 // Posts queries
-export async function listPosts(tag?: string) {
+export async function listPosts(tag?: string, search?: string) {
   const db = await getDb();
   if (!db) return [];
 
@@ -107,6 +107,22 @@ export async function listPosts(tag?: string) {
       .select()
       .from(posts)
       .where(inArray(posts.id, postIds))
+      .orderBy(desc(posts.createdAt));
+    
+    return enrichPostsWithAuthor(results);
+  }
+
+  if (search) {
+    const searchPattern = `%${search}%`;
+    const results = await db
+      .select()
+      .from(posts)
+      .where(
+        or(
+          like(posts.title, searchPattern),
+          like(posts.content, searchPattern)
+        )
+      )
       .orderBy(desc(posts.createdAt));
     
     return enrichPostsWithAuthor(results);
