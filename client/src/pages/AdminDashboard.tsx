@@ -16,7 +16,7 @@ interface UploadedImage {
 }
 
 export default function AdminDashboard() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading } = useAuth();
   const [location, setLocation] = useLocation();
   const [editingPostId, setEditingPostId] = useState<number | null>(null);
 
@@ -57,12 +57,12 @@ export default function AdminDashboard() {
     { enabled: !!editPostIdFromUrl }
   );
 
-  // Redirect if not authenticated
+  // Redirect if not authenticated (but wait for auth check to complete)
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!loading && !isAuthenticated) {
       window.location.href = getLoginUrl();
     }
-  }, [isAuthenticated]);
+  }, [loading, isAuthenticated]);
   
   // Load post data when editing from URL
   useEffect(() => {
@@ -199,10 +199,23 @@ export default function AdminDashboard() {
     }
   };
 
-  if (!isAuthenticated) {
+  // Show loading screen while checking authentication
+  if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+      </div>
+    );
+  }
+
+  // This should not be reached due to useEffect redirect, but keep as safety check
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-4">Redirecting to login...</p>
+          <Loader2 className="w-8 h-8 animate-spin text-gray-400 mx-auto" />
+        </div>
       </div>
     );
   }
