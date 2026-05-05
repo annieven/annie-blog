@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
@@ -81,7 +80,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header className="border-b border-gray-200 sticky top-0 z-50 bg-white">
         <div className="container py-8">
@@ -92,23 +91,21 @@ export default function Home() {
             </div>
             <div className="flex gap-3">
               {isAuthenticated && (
-                <Button
+                <button
                   onClick={() => setLocation("/admin")}
-                  variant="outline"
-                  size="sm"
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2"
                 >
-                  <Plus className="w-4 h-4 mr-2" />
+                  <Plus className="w-4 h-4" />
                   New Post
-                </Button>
+                </button>
               )}
               {!isAuthenticated && (
-                <Button
+                <button
                   onClick={() => (window.location.href = getLoginUrl())}
-                  variant="outline"
-                  size="sm"
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
                 >
                   Sign In
-                </Button>
+                </button>
               )}
             </div>
           </div>
@@ -137,77 +134,37 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Tags Filter */}
-      {displayTags.length > 0 && (
-        <div className="border-b border-gray-200">
-          <div className="container py-6">
-            <div className="flex flex-wrap gap-2">
-              {displayTags.map((tag) => (
-                <button
-                  key={tag}
-                  onClick={() => handleTagClick(tag)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    selectedTag === tag
-                      ? "bg-gray-900 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {tag}
-                </button>
-              ))}
-              {selectedTag && (
-                <button
-                  onClick={() => setLocation("/")}
-                  className="px-4 py-2 rounded-full text-sm font-medium text-gray-500 hover:text-gray-700"
-                >
-                  Clear
-                </button>
-              )}
+      {/* Main Content with Sidebar */}
+      <div className="flex-1 flex">
+        {/* Main Posts Area */}
+        <main className="flex-1 container py-12">
+          {isLoading ? (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <main className="container py-12">
-        {isLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
-          </div>
-        ) : posts.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-500 text-lg">
-              {selectedTag ? "No posts found with this tag" : "No posts yet"}
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-12">
-            {posts.map((post) => (
-              <article
-                key={post.id}
-                className="border-b border-gray-200 pb-12 last:border-b-0 cursor-pointer hover:opacity-75 transition-opacity"
-                onClick={() => setLocation(`/posts/${post.id}`)}
-              >
-                {/* Post Header */}
-                <div className="mb-6">
-                  <h2 className="text-3xl font-light text-gray-900 mb-2">
-                    {post.title}
-                  </h2>
-                  <div className="flex items-center justify-between text-gray-500 text-sm">
-                    <div>
-                      <p>
-                        {new Date(post.createdAt).toLocaleDateString("zh-TW", {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: false,
-                        })}
-                      </p>
-                      {post.updatedAt && new Date(post.updatedAt).getTime() !== new Date(post.createdAt).getTime() && (
-                        <p className="text-xs text-gray-400 mt-1">
-                          Last updated: {new Date(post.updatedAt).toLocaleDateString("zh-TW", {
+          ) : posts.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-500 text-lg">
+                {selectedTag ? "No posts found with this tag" : "No posts yet"}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-12 pr-8">
+              {posts.map((post) => (
+                <article
+                  key={post.id}
+                  className="border-b border-gray-200 pb-12 last:border-b-0 cursor-pointer hover:opacity-75 transition-opacity"
+                  onClick={() => setLocation(`/posts/${post.id}`)}
+                >
+                  {/* Post Header */}
+                  <div className="mb-6">
+                    <h2 className="text-3xl font-light text-gray-900 mb-2">
+                      {post.title}
+                    </h2>
+                    <div className="flex items-center justify-between text-gray-500 text-sm">
+                      <div>
+                        <p>
+                          {new Date(post.createdAt).toLocaleDateString("zh-TW", {
                             year: "numeric",
                             month: "2-digit",
                             day: "2-digit",
@@ -216,57 +173,103 @@ export default function Home() {
                             hour12: false,
                           })}
                         </p>
-                      )}
-                      {(post as any).author && (
-                        <a
-                          href={`/authors/${(post as any).author.id}`}
-                          onClick={(e) => e.stopPropagation()}
-                          className="text-xs text-gray-400 mt-1 hover:text-gray-600 transition-colors block"
-                        >
-                          By {(post as any).author.name || "Anonymous"}
-                        </a>
-                      )}
+                        {post.updatedAt && new Date(post.updatedAt).getTime() !== new Date(post.createdAt).getTime() && (
+                          <p className="text-xs text-gray-400 mt-1">
+                            Last updated: {new Date(post.updatedAt).toLocaleDateString("zh-TW", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              hour12: false,
+                            })}
+                          </p>
+                        )}
+                        {(post as any).author && (
+                          <a
+                            href={`/authors/${(post as any).author.id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-xs text-gray-400 mt-1 hover:text-gray-600 transition-colors block"
+                          >
+                            By {(post as any).author.name || "Anonymous"}
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Post Preview */}
-                <div className="mb-6">
-                  <p className="text-gray-700 line-clamp-3 leading-relaxed">
-                    {post.content.substring(0, 200)}
-                    {post.content.length > 200 ? "..." : ""}
-                  </p>
-                </div>
-
-                {/* Featured Image */}
-                {post.images && post.images.length > 0 && (
-                  <div className="mb-6 aspect-video rounded-lg overflow-hidden bg-gray-100">
-                    <img
-                      src={post.images[0].imageUrl}
-                      alt={post.title}
-                      className="w-full h-full object-cover"
-                    />
+                  {/* Post Preview */}
+                  <div className="mb-6">
+                    <p className="text-gray-700 line-clamp-3 leading-relaxed">
+                      {post.content.substring(0, 200)}
+                      {post.content.length > 200 ? "..." : ""}
+                    </p>
                   </div>
-                )}
 
-                {/* Tags */}
-                {post.tags && post.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs font-medium text-gray-600 bg-gray-50 px-3 py-1 rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  {/* Featured Image */}
+                  {post.images && post.images.length > 0 && (
+                    <div className="mb-6 aspect-video rounded-lg overflow-hidden bg-gray-100">
+                      <img
+                        src={post.images[0].imageUrl}
+                        alt={post.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+
+                  {/* Tags */}
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-xs font-medium text-gray-600 bg-gray-50 px-3 py-1 rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </article>
+              ))}
+            </div>
+          )}
+        </main>
+
+        {/* Right Sidebar - Tags */}
+        {displayTags.length > 0 && (
+          <aside className="w-64 py-12 pl-4 border-l border-gray-200">
+            <div className="sticky top-32">
+              <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">
+                Tags
+              </h3>
+              <div className="space-y-2">
+                {displayTags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => handleTagClick(tag)}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      selectedTag === tag
+                        ? "bg-gray-900 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                ))}
+                {selectedTag && (
+                  <button
+                    onClick={() => setLocation("/")}
+                    className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                  >
+                    Clear Filter
+                  </button>
                 )}
-              </article>
-            ))}
-          </div>
+              </div>
+            </div>
+          </aside>
         )}
-      </main>
+      </div>
 
       {/* Footer */}
       <footer className="border-t border-gray-200 mt-20">
