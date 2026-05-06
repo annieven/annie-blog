@@ -1,4 +1,3 @@
-import { useAuth } from "@/_core/hooks/useAuth";
 import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,8 @@ import { trpc } from "@/lib/trpc";
 import { Loader2, X, Upload, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { getLoginUrl } from "@/const";
+import { useAuth } from "@/_core/hooks/useAuth";
+import { Streamdown } from "streamdown";
 
 interface UploadedImage {
   id?: number;
@@ -264,14 +265,22 @@ export default function AdminDashboard() {
                 {/* Content */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Content
+                    Content (Markdown supported)
                   </label>
                   <Textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    placeholder="Write your post content here..."
-                    className="w-full min-h-64"
+                    placeholder="Write your post content here... Markdown syntax supported."
+                    className="w-full min-h-64 font-mono text-sm"
                   />
+                  {content && (
+                    <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <p className="text-xs font-medium text-gray-600 mb-3">Preview:</p>
+                      <div className="prose prose-sm max-w-none text-gray-700">
+                        <Streamdown>{content}</Streamdown>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Tags */}

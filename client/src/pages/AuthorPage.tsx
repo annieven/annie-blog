@@ -2,6 +2,7 @@ import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Streamdown } from "streamdown";
 
 interface AuthorPageProps {
   params: {
@@ -81,11 +82,8 @@ export default function AuthorPage({ params }: AuthorPageProps) {
                 </div>
 
                 {/* Post Preview */}
-                <div className="mb-6">
-                  <p className="text-gray-700 line-clamp-3 leading-relaxed">
-                    {post.content.substring(0, 200)}
-                    {post.content.length > 200 ? "..." : ""}
-                  </p>
+                <div className="mb-6 text-gray-700 line-clamp-3 leading-relaxed prose prose-sm max-w-none">
+                  <Streamdown>{post.content.substring(0, 200) + (post.content.length > 200 ? "..." : "")}</Streamdown>
                 </div>
 
                 {/* Featured Image */}

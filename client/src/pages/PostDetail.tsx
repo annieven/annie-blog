@@ -3,6 +3,7 @@ import { trpc } from "@/lib/trpc";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { Streamdown } from "streamdown";
 
 interface PostDetailProps {
   params: {
@@ -116,10 +117,8 @@ export default function PostDetail({ params }: PostDetailProps) {
       {/* Main Content */}
       <main className="container py-12 max-w-3xl">
         {/* Post Content */}
-        <div className="prose prose-lg max-w-none mb-12">
-          <div className="text-gray-700 whitespace-pre-wrap leading-relaxed">
-            {post.content}
-          </div>
+        <div className="prose prose-lg max-w-none mb-12 text-gray-700 leading-relaxed">
+          <Streamdown>{post.content}</Streamdown>
         </div>
 
         {/* Images Gallery */}

@@ -5,6 +5,7 @@ import { useState, useMemo, useEffect } from "react";
 import { getLoginUrl } from "@/const";
 import { Loader2, Plus, Search, X } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { Streamdown } from "streamdown";
 
 interface PostWithAuthor {
   id: number;
@@ -199,11 +200,8 @@ export default function Home() {
                   </div>
 
                   {/* Post Preview */}
-                  <div className="mb-6">
-                    <p className="text-gray-700 line-clamp-3 leading-relaxed">
-                      {post.content.substring(0, 200)}
-                      {post.content.length > 200 ? "..." : ""}
-                    </p>
+                  <div className="mb-6 text-gray-700 line-clamp-3 leading-relaxed prose prose-sm max-w-none">
+                    <Streamdown>{post.content.substring(0, 200) + (post.content.length > 200 ? "..." : "")}</Streamdown>
                   </div>
 
                   {/* Featured Image */}
