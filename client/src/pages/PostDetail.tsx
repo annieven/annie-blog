@@ -164,7 +164,7 @@ export default function PostDetail({ params }: PostDetailProps) {
       {/* Footer */}
       <footer className="border-t border-gray-200 mt-20">
         <div className="container py-8 text-center text-gray-500 text-sm">
-          <p>&copy; 2026 Annie's Blog. All thoughts are my own.</p>
+          <p>&copy; 2026 {import.meta.env.VITE_APP_TITLE || "Annie's Blog"}. All thoughts are my own.</p>
         </div>
       </footer>
     </div>

@@ -87,7 +87,7 @@ export default function Home() {
         <div className="container py-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl font-light text-gray-900">Annie's Blog</h1>
+              <h1 className="text-4xl font-light text-gray-900">{import.meta.env.VITE_APP_TITLE || "Annie's Blog"}</h1>
               <p className="text-gray-500 mt-2">A personal collection of thoughts and moments</p>
             </div>
             <div className="flex gap-3">
@@ -272,7 +272,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-gray-200 mt-20">
         <div className="container py-8 text-center text-gray-500 text-sm">
-          <p>&copy; 2026 Annie's Blog. All thoughts are my own.</p>
+          <p>&copy; 2026 {import.meta.env.VITE_APP_TITLE || "Annie's Blog"}. All thoughts are my own.</p>
         </div>
       </footer>
     </div>
