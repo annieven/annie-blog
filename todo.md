@@ -62,3 +62,6 @@
 
 ## 待车
 - [x] 修改副標題：從「A personal collection of thoughts and moments」改為「A collection of thoughts and moments」
+
+## Bug 修複
+- [x] 修複 iostream 標籤错誤：修改首頁和作者頁的文章預覽為純文字，不用 Streamdown 渲染截斷的 Markdown

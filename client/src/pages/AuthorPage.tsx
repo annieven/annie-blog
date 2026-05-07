@@ -82,8 +82,8 @@ export default function AuthorPage({ params }: AuthorPageProps) {
                 </div>
 
                 {/* Post Preview */}
-                <div className="mb-6 text-gray-700 line-clamp-3 leading-relaxed prose prose-sm max-w-none">
-                  <Streamdown>{post.content.substring(0, 200) + (post.content.length > 200 ? "..." : "")}</Streamdown>
+                <div className="mb-6 text-gray-700 line-clamp-3 leading-relaxed">
+                  <p>{post.content.substring(0, 200) + (post.content.length > 200 ? "..." : "")}</p>
                 </div>
 
                 {/* Featured Image */}
