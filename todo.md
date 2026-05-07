@@ -59,3 +59,6 @@
 
 ## Bug 修複
 - [x] 修複網站標題設定：使用環境變數 VITE_APP_TITLE 動態設定標題，使後台設定的標題能正確同步到前台
+
+## 待车
+- [x] 修改副標題：從「A personal collection of thoughts and moments」改為「A collection of thoughts and moments」

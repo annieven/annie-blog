@@ -88,7 +88,7 @@ export default function Home() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-4xl font-light text-gray-900">{import.meta.env.VITE_APP_TITLE || "Annie's Blog"}</h1>
-              <p className="text-gray-500 mt-2">A personal collection of thoughts and moments</p>
+              <p className="text-gray-500 mt-2">{import.meta.env.VITE_APP_SUBTITLE || "A personal collection of thoughts and moments"}</p>
             </div>
             <div className="flex gap-3">
               {isAuthenticated && (
