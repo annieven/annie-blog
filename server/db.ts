@@ -1,4 +1,4 @@
-import { eq, desc, inArray, like, or } from "drizzle-orm";
+import { eq, desc, inArray, like, or, and, gte, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, posts, postImages, postTags, InsertPost, InsertPostImage, InsertPostTag, User, Post } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -129,6 +129,28 @@ export async function listPosts(tag?: string, search?: string) {
   }
 
   const results = await db.select().from(posts).orderBy(desc(posts.createdAt));
+  return enrichPostsWithAuthor(results);
+}
+
+export async function listPostsByMonth(year: number, month: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  // Create date range for the given month using UTC
+  const startDate = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0, 0));
+  const endDate = new Date(Date.UTC(year, month, 0, 23, 59, 59, 999));
+
+  const results = await db
+    .select()
+    .from(posts)
+    .where(
+      and(
+        gte(posts.createdAt, startDate),
+        lte(posts.createdAt, endDate)
+      )
+    )
+    .orderBy(desc(posts.createdAt));
+
   return enrichPostsWithAuthor(results);
 }
 

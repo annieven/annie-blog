@@ -20,6 +20,7 @@ import {
   getAllTags,
   getDb,
   enrichPostsWithAuthor,
+  listPostsByMonth,
 } from "./db";
 import { storagePut } from "./storage";
 
@@ -76,6 +77,28 @@ export const appRouter = router({
           images,
           tags: tags.map(t => t.tag),
         };
+      }),
+
+    // Get all posts by year and month
+    byMonth: publicProcedure
+      .input(z.object({ year: z.number(), month: z.number() }))
+      .query(async ({ input }) => {
+        const allPosts = await listPostsByMonth(input.year, input.month);
+        
+        // Fetch images and tags for each post
+        const postsWithDetails = await Promise.all(
+          allPosts.map(async (post) => {
+            const images = await getPostImages(post.id);
+            const tags = await getPostTags(post.id);
+            return {
+              ...post,
+              images,
+              tags: tags.map(t => t.tag),
+            };
+          })
+        );
+        
+        return postsWithDetails;
       }),
 
     // Get all posts by author ID
