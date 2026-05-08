@@ -267,3 +267,29 @@ export async function getAllTags() {
   const result = await db.selectDistinct({ tag: postTags.tag }).from(postTags);
   return result.map(r => r.tag).sort();
 }
+
+export async function incrementPostViewCount(postId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Get current view count and increment
+  const current = await db.select({ viewCount: posts.viewCount }).from(posts).where(eq(posts.id, postId)).limit(1);
+  if (current.length === 0) return;
+  
+  return db.update(posts).set({
+    viewCount: current[0].viewCount + 1,
+  }).where(eq(posts.id, postId));
+}
+
+export async function listPopularPosts(limit: number = 5) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const results = await db
+    .select()
+    .from(posts)
+    .orderBy(desc(posts.viewCount), desc(posts.createdAt))
+    .limit(limit);
+  
+  return enrichPostsWithAuthor(results);
+}

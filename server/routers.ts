@@ -21,6 +21,8 @@ import {
   getDb,
   enrichPostsWithAuthor,
   listPostsByMonth,
+  incrementPostViewCount,
+  listPopularPosts,
 } from "./db";
 import { storagePut } from "./storage";
 
@@ -69,6 +71,9 @@ export const appRouter = router({
         const post = await getPostById(input.id);
         if (!post) return null;
         
+        // Increment view count (fire and forget)
+        incrementPostViewCount(input.id).catch(err => console.error("Failed to increment view count:", err));
+        
         const images = await getPostImages(post.id);
         const tags = await getPostTags(post.id);
         
@@ -84,6 +89,29 @@ export const appRouter = router({
       .input(z.object({ year: z.number(), month: z.number() }))
       .query(async ({ input }) => {
         const allPosts = await listPostsByMonth(input.year, input.month);
+        
+        // Fetch images and tags for each post
+        const postsWithDetails = await Promise.all(
+          allPosts.map(async (post) => {
+            const images = await getPostImages(post.id);
+            const tags = await getPostTags(post.id);
+            return {
+              ...post,
+              images,
+              tags: tags.map(t => t.tag),
+            };
+          })
+        );
+        
+        return postsWithDetails;
+      }),
+
+    // Get popular posts (sorted by view count)
+    popular: publicProcedure
+      .input(z.object({ limit: z.number().optional() }).optional())
+      .query(async ({ input }) => {
+        const limit = input?.limit || 5;
+        const allPosts = await listPopularPosts(limit);
         
         // Fetch images and tags for each post
         const postsWithDetails = await Promise.all(

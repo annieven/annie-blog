@@ -15,6 +15,13 @@
       "when": 1777896026047,
       "tag": "0001_gray_supreme_intelligence",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1778279589177,
+      "tag": "0002_silent_white_queen",
+      "breakpoints": true
     }
   ]
 }

@@ -21,7 +21,7 @@ export default function PostDetail({ params }: PostDetailProps) {
     { authorId: user?.id || 0 },
     { enabled: !!user }
   );
-  const { data: allPosts, isLoading: allPostsLoading, error: allPostsError } = trpc.posts.list.useQuery();
+  const { data: allPosts, isLoading: allPostsLoading, error: allPostsError } = trpc.posts.popular.useQuery({ limit: 5 });
 
   if (isLoading) {
     return (

@@ -102,4 +102,4 @@
 
 ## 待改進
 - [x] 文章詳細頁右側邊欄：為「Your Posts」和「Popular Posts」添加 loading / error / empty states UI
-- [ ] 實作真正的「Popular Posts」排序邏輯（目前只是顯示最近文章）
+- [x] 實作真正的「Popular Posts」排序邏輯（按 viewCount 降序排序，每次查看文章時自動增加計數）
