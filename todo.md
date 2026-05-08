@@ -72,3 +72,7 @@
 
 ## 待车
 - [x] 在首頁 header 添加登出按鈕，位置在 New Post 按鈕右邊
+
+
+## Bug 待修複
+- [x] 修複 Clear Filter 按鈕不的效的問題
