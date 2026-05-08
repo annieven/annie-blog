@@ -94,3 +94,12 @@
 - [x] 手機版登出後「Sign In」按鈕改為只顯示圖示，不會擦圧標題副標題
 
 - [x] 將手機版 Sign In 按鈕圖示改為 User 圖示
+
+
+## 新功能
+- [x] 文章詳細頁添加右侧邊欄：登入用戶顯示「Your Posts」，未登入用戶顯示「Popular Posts」，手機版隱藏
+
+
+## 待改進
+- [ ] 文章詳細頁右側邊欄：為「Your Posts」和「Popular Posts」添加 loading / error / empty states UI
+- [ ] 實作真正的「Popular Posts」排序邏輯（目前只是顯示最近文章）

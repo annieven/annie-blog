@@ -17,6 +17,11 @@ export default function PostDetail({ params }: PostDetailProps) {
   const postId = parseInt(params.id);
 
   const { data: post, isLoading } = trpc.posts.getById.useQuery({ id: postId });
+  const { data: userPosts } = trpc.posts.getByAuthorId.useQuery(
+    { authorId: user?.id || 0 },
+    { enabled: !!user }
+  );
+  const { data: allPosts } = trpc.posts.list.useQuery();
 
   if (isLoading) {
     return (
@@ -117,49 +122,82 @@ export default function PostDetail({ params }: PostDetailProps) {
       {/* Main Content */}
       <main className="py-12">
         <div className="container">
-        {/* Post Content */}
-        <div className="prose prose-lg max-w-none mb-12 text-gray-700 leading-relaxed">
-          <Streamdown>{post.content}</Streamdown>
-        </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Main Article */}
+            <div className="lg:col-span-2">
+              {/* Post Content */}
+              <div className="prose prose-lg max-w-none mb-12 text-gray-700 leading-relaxed">
+                <Streamdown>{post.content}</Streamdown>
+              </div>
 
-        {/* Images Gallery */}
-        {post.images && post.images.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-light text-gray-900 mb-6">Images</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {post.images.map((image) => (
-                <div
-                  key={image.id}
-                  className="aspect-video rounded-lg overflow-hidden bg-gray-100"
-                >
-                  <img
-                    src={image.imageUrl}
-                    alt="Post image"
-                    className="w-full h-full object-cover"
-                  />
+              {/* Images Gallery */}
+              {post.images && post.images.length > 0 && (
+                <div className="mb-12">
+                  <h2 className="text-2xl font-light text-gray-900 mb-6">Images</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {post.images.map((image) => (
+                      <div
+                        key={image.id}
+                        className="aspect-video rounded-lg overflow-hidden bg-gray-100"
+                      >
+                        <img
+                          src={image.imageUrl}
+                          alt="Post image"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
+              )}
 
-        {/* Tags */}
-        {post.tags && post.tags.length > 0 && (
-          <div className="border-t border-gray-200 pt-8">
-            <h2 className="text-lg font-light text-gray-900 mb-4">Tags</h2>
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag: string) => (
-                <a
-                  key={tag}
-                  href={`/?tag=${encodeURIComponent(tag)}`}
-                  className="px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-                >
-                  {tag}
-                </a>
-              ))}
+              {/* Tags */}
+              {post.tags && post.tags.length > 0 && (
+                <div className="border-t border-gray-200 pt-8">
+                  <h2 className="text-lg font-light text-gray-900 mb-4">Tags</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map((tag: string) => (
+                      <a
+                        key={tag}
+                        href={`/?tag=${encodeURIComponent(tag)}`}
+                        className="px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                      >
+                        {tag}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
+
+            {/* Sidebar - Hidden on mobile */}
+            <aside className="hidden lg:block">
+              <div className="sticky top-8">
+                <h3 className="text-lg font-light text-gray-900 mb-4">
+                  {user ? "Your Posts" : "Popular Posts"}
+                </h3>
+                <div className="space-y-3">
+                  {(user ? userPosts : allPosts)?.slice(0, 5).map((p: any) => (
+                    <a
+                      key={p.id}
+                      href={`/posts/${p.id}`}
+                      className="block p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+                    >
+                      <p className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">
+                        {p.title}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(p.createdAt).toLocaleDateString("zh-TW", {
+                          month: "2-digit",
+                          day: "2-digit",
+                        })}
+                      </p>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </aside>
           </div>
-        )}
         </div>
       </main>
 
