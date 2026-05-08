@@ -3,7 +3,7 @@ import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 import { useState, useMemo, useEffect } from "react";
 import { getLoginUrl } from "@/const";
-import { Loader2, Plus, Search, X } from "lucide-react";
+import { Loader2, Plus, Search, X, LogOut } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Streamdown } from "streamdown";
 
@@ -92,13 +92,16 @@ export default function Home() {
             </div>
             <div className="flex gap-3">
               {isAuthenticated && (
-                <button
-                  onClick={() => setLocation("/admin")}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2"
-                >
-                  <Plus className="w-4 h-4" />
-                  New Post
-                </button>
+                <>
+                  <button
+                    onClick={() => setLocation("/admin")}
+                    className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    New Post
+                  </button>
+                  <LogoutButton />
+                </>
               )}
               {!isAuthenticated && (
                 <button
@@ -276,5 +279,33 @@ export default function Home() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function LogoutButton() {
+  const logout = trpc.auth.logout.useMutation();
+  const utils = trpc.useUtils();
+  const [, setLocation] = useLocation();
+
+  const handleLogout = async () => {
+    try {
+      await logout.mutateAsync();
+      // Invalidate auth state to refresh UI
+      await utils.auth.me.invalidate();
+      setLocation("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleLogout}
+      disabled={logout.isPending}
+      className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <LogOut className="w-4 h-4" />
+      {logout.isPending ? "Signing out..." : "Sign Out"}
+    </button>
   );
 }
