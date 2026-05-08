@@ -3,7 +3,7 @@ import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
 import { useState, useMemo, useEffect } from "react";
 import { getLoginUrl } from "@/const";
-import { Loader2, Plus, Search, X, LogOut } from "lucide-react";
+import { Loader2, Plus, Search, X, LogOut, User } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Streamdown } from "streamdown";
 
@@ -133,7 +133,7 @@ export default function Home() {
                   className="p-2 border border-gray-300 rounded-lg text-gray-900 hover:bg-gray-50 transition-colors"
                   title="Sign In"
                 >
-                  <Plus className="w-5 h-5" />
+                  <User className="w-5 h-5" />
                 </button>
               )}
             </div>
