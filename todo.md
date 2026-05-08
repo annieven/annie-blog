@@ -103,3 +103,9 @@
 ## 待改進
 - [x] 文章詳細頁右側邊欄：為「Your Posts」和「Popular Posts」添加 loading / error / empty states UI
 - [x] 實作真正的「Popular Posts」排序邏輯（按 viewCount 降序排序，每次查看文章時自動增加計數）
+
+
+## 圖片區塊調整
+- [x] 移除圖片區塊的「Images」標籤
+- [x] 修正圖片顯示不完整問題（上下裁剪，改用 object-contain）
+- [x] 將圖片區塊放大至原本的 1.7 倍，向右下方擴展（使用 CSS transform: scale(1.7)）

@@ -131,17 +131,16 @@ export default function PostDetail({ params }: PostDetailProps) {
               {/* Images Gallery */}
               {post.images && post.images.length > 0 && (
                 <div className="mb-12">
-                  <h2 className="text-2xl font-light text-gray-900 mb-6">Images</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ transform: 'scale(1.7)', transformOrigin: 'top left', marginBottom: 'calc(1.7 * 100% - 100%)' }}>
                     {post.images.map((image) => (
                       <div
                         key={image.id}
-                        className="aspect-video rounded-lg overflow-hidden bg-gray-100"
+                        className="rounded-lg overflow-hidden bg-gray-100"
                       >
                         <img
                           src={image.imageUrl}
                           alt="Post image"
-                          className="w-full h-full object-cover"
+                          className="w-full h-auto object-contain"
                         />
                       </div>
                     ))}
