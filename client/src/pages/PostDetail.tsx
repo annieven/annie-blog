@@ -52,7 +52,7 @@ export default function PostDetail({ params }: PostDetailProps) {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="border-b border-gray-200">
-        <div className="container py-8">
+        <div className="container py-8 max-w-3xl">
           <Button
             onClick={() => setLocation("/")}
             variant="ghost"
@@ -115,7 +115,8 @@ export default function PostDetail({ params }: PostDetailProps) {
       </header>
 
       {/* Main Content */}
-      <main className="container py-12 max-w-3xl">
+      <main className="py-12">
+        <div className="container max-w-3xl">
         {/* Post Content */}
         <div className="prose prose-lg max-w-none mb-12 text-gray-700 leading-relaxed">
           <Streamdown>{post.content}</Streamdown>
@@ -159,6 +160,7 @@ export default function PostDetail({ params }: PostDetailProps) {
             </div>
           </div>
         )}
+        </div>
       </main>
 
       {/* Footer */}
