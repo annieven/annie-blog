@@ -236,11 +236,11 @@ export default function Home() {
 
                   {/* Featured Image */}
                   {post.images && post.images.length > 0 && (
-                    <div className="mb-6 rounded-lg overflow-hidden bg-gray-100" style={{ height: '240px', maxHeight: '40vh', width: '100%', marginLeft: '0' }}>
+                    <div className="mb-6 rounded-lg overflow-hidden bg-gray-100" style={{ height: '240px', maxHeight: '40vh', width: 'fit-content', marginLeft: '0' }}>
                       <img
                         src={post.images[0].imageUrl}
                         alt={post.title}
-                        className="w-full h-full object-contain"
+                        className="h-full object-contain"
                       />
                     </div>
                   )}
