@@ -88,11 +88,11 @@ export default function AuthorPage({ params }: AuthorPageProps) {
 
                 {/* Featured Image */}
                 {post.images && post.images.length > 0 && (
-                  <div className="mb-6 aspect-video rounded-lg overflow-hidden bg-gray-100">
+                  <div className="mb-6 rounded-lg overflow-hidden bg-gray-100" style={{ height: '240px', maxHeight: '40vh', width: 'fit-content', marginLeft: '0' }}>
                     <img
                       src={post.images[0].imageUrl}
                       alt={post.title}
-                      className="w-full h-full object-cover"
+                      className="h-full object-contain"
                     />
                   </div>
                 )}
