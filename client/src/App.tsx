@@ -9,6 +9,7 @@ import PostDetail from "./pages/PostDetail";
 import AdminDashboard from "./pages/AdminDashboard";
 import AuthorPage from "./pages/AuthorPage";
 import MonthArchive from "./pages/MonthArchive";
+import TagsPage from "./pages/TagsPage";
 
 function Router() {
   return (
@@ -17,6 +18,7 @@ function Router() {
       <Route path={"/posts/:id"} component={PostDetail} />
       <Route path={"/authors/:authorId"} component={AuthorPage} />
       <Route path={"/:year/:month"} component={MonthArchive} />
+      <Route path={"/tags"} component={TagsPage} />
       <Route path={"/admin"} component={AdminDashboard} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
