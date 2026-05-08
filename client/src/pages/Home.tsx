@@ -139,21 +139,23 @@ export default function Home() {
       </header>
 
       {/* Main Content with Sidebar */}
-      <div className="flex-1 flex">
-        {/* Main Posts Area */}
-        <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
-          {isLoading ? (
-            <div className="flex justify-center items-center py-20">
+      <div className="flex-1 py-12">
+        <div className="container">
+          <div className="flex gap-8">
+            {/* Main Posts Area */}
+            <main className="flex-1 min-w-0">
+            {isLoading ? (
+              <div className="flex justify-center items-center py-20">
               <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
-            </div>
-          ) : posts.length === 0 ? (
-            <div className="text-center py-20">
+              </div>
+            ) : posts.length === 0 ? (
+              <div className="text-center py-20">
               <p className="text-gray-500 text-lg">
                 {selectedTag ? "No posts found with this tag" : "No posts yet"}
               </p>
-            </div>
-          ) : (
-            <div className="space-y-12">
+              </div>
+            ) : (
+              <div className="space-y-12">
               {posts.map((post) => (
                 <article
                   key={post.id}
@@ -233,46 +235,47 @@ export default function Home() {
                   )}
                 </article>
               ))}
-            </div>
-          )}
-        </main>
+              </div>            )}
+            </main>
 
-        {/* Right Sidebar - Tags */}
-        {displayTags.length > 0 && (
-          <aside className="w-64 py-12 pl-4 border-l border-gray-200">
-            <div className="sticky top-32">
-              <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">
-                Tags
-              </h3>
-              <div className="space-y-2">
-                {displayTags.map((tag) => (
-                  <button
-                    key={tag}
-                    onClick={() => handleTagClick(tag)}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      selectedTag === tag
-                        ? "bg-gray-900 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
-                  >
-                    {tag}
-                  </button>
-                ))}
-                {selectedTag && (
-                  <button
-                    onClick={() => {
-                      setSelectedTag(undefined);
-                      setLocation("/");
-                    }}
-                    className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                  >
-                    Clear Filter
-                  </button>
-                )}
-              </div>
-            </div>
-          </aside>
-        )}
+            {/* Right Sidebar - Tags */}
+            {displayTags.length > 0 && (
+              <aside className="w-64 flex-shrink-0 border-l border-gray-200 pl-4">
+                <div className="sticky top-32">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">
+                    Tags
+                  </h3>
+                  <div className="space-y-2">
+                    {displayTags.map((tag) => (
+                      <button
+                        key={tag}
+                        onClick={() => handleTagClick(tag)}
+                        className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          selectedTag === tag
+                            ? "bg-gray-900 text-white"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        }`}
+                      >
+                        {tag}
+                      </button>
+                    ))}
+                    {selectedTag && (
+                      <button
+                        onClick={() => {
+                          setSelectedTag(undefined);
+                          setLocation("/");
+                        }}
+                        className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                      >
+                        Clear Filter
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </aside>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Footer */}
