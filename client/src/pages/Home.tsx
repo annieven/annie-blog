@@ -130,9 +130,10 @@ export default function Home() {
               {!isAuthenticated && (
                 <button
                   onClick={() => (window.location.href = getLoginUrl())}
-                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                  className="p-2 border border-gray-300 rounded-lg text-gray-900 hover:bg-gray-50 transition-colors"
+                  title="Sign In"
                 >
-                  Sign In
+                  <Plus className="w-5 h-5" />
                 </button>
               )}
             </div>
