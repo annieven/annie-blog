@@ -17,11 +17,11 @@ export default function PostDetail({ params }: PostDetailProps) {
   const postId = parseInt(params.id);
 
   const { data: post, isLoading } = trpc.posts.getById.useQuery({ id: postId });
-  const { data: userPosts } = trpc.posts.getByAuthorId.useQuery(
+  const { data: userPosts, isLoading: userPostsLoading, error: userPostsError } = trpc.posts.getByAuthorId.useQuery(
     { authorId: user?.id || 0 },
     { enabled: !!user }
   );
-  const { data: allPosts } = trpc.posts.list.useQuery();
+  const { data: allPosts, isLoading: allPostsLoading, error: allPostsError } = trpc.posts.list.useQuery();
 
   if (isLoading) {
     return (
@@ -103,7 +103,6 @@ export default function PostDetail({ params }: PostDetailProps) {
               )}
             </div>
             {isAuthor && (
-              <>
               <div className="flex gap-2">
                 <Button
                   onClick={() => setLocation(`/admin?edit=${post.id}`)}
@@ -113,7 +112,6 @@ export default function PostDetail({ params }: PostDetailProps) {
                   Edit
                 </Button>
               </div>
-              </>
             )}
           </div>
         </div>
@@ -177,23 +175,69 @@ export default function PostDetail({ params }: PostDetailProps) {
                   {user ? "Your Posts" : "Popular Posts"}
                 </h3>
                 <div className="space-y-3">
-                  {(user ? userPosts : allPosts)?.slice(0, 5).map((p: any) => (
-                    <a
-                      key={p.id}
-                      href={`/posts/${p.id}`}
-                      className="block p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
-                    >
-                      <p className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">
-                        {p.title}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {new Date(p.createdAt).toLocaleDateString("zh-TW", {
-                          month: "2-digit",
-                          day: "2-digit",
-                        })}
-                      </p>
-                    </a>
-                  ))}
+                  {user ? (
+                    // Your Posts - for authenticated users
+                    userPostsLoading ? (
+                      <div className="text-center py-8">
+                        <Loader2 className="w-5 h-5 animate-spin text-gray-400 mx-auto" />
+                      </div>
+                    ) : userPostsError ? (
+                      <div className="text-center py-8">
+                        <p className="text-sm text-red-500 mb-2">Failed to load posts</p>
+                      </div>
+                    ) : userPosts && userPosts.length > 0 ? (
+                      userPosts.slice(0, 5).map((p: any) => (
+                        <a
+                          key={p.id}
+                          href={`/posts/${p.id}`}
+                          className="block p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+                        >
+                          <p className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">
+                            {p.title}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {new Date(p.createdAt).toLocaleDateString("zh-TW", {
+                              month: "2-digit",
+                              day: "2-digit",
+                            })}
+                          </p>
+                        </a>
+                      ))
+                    ) : (
+                      <p className="text-sm text-gray-500 text-center py-8">No posts yet</p>
+                    )
+                  ) : (
+                    // Popular Posts - for non-authenticated users
+                    allPostsLoading ? (
+                      <div className="text-center py-8">
+                        <Loader2 className="w-5 h-5 animate-spin text-gray-400 mx-auto" />
+                      </div>
+                    ) : allPostsError ? (
+                      <div className="text-center py-8">
+                        <p className="text-sm text-red-500 mb-2">Failed to load posts</p>
+                      </div>
+                    ) : allPosts && allPosts.length > 0 ? (
+                      allPosts.slice(0, 5).map((p: any) => (
+                        <a
+                          key={p.id}
+                          href={`/posts/${p.id}`}
+                          className="block p-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+                        >
+                          <p className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">
+                            {p.title}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {new Date(p.createdAt).toLocaleDateString("zh-TW", {
+                              month: "2-digit",
+                              day: "2-digit",
+                            })}
+                          </p>
+                        </a>
+                      ))
+                    ) : (
+                      <p className="text-sm text-gray-500 text-center py-8">No posts available</p>
+                    )
+                  )}
                 </div>
               </div>
             </aside>

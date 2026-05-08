@@ -101,5 +101,5 @@
 
 
 ## 待改進
-- [ ] 文章詳細頁右側邊欄：為「Your Posts」和「Popular Posts」添加 loading / error / empty states UI
+- [x] 文章詳細頁右側邊欄：為「Your Posts」和「Popular Posts」添加 loading / error / empty states UI
 - [ ] 實作真正的「Popular Posts」排序邏輯（目前只是顯示最近文章）
