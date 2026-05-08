@@ -109,3 +109,8 @@
 - [x] 移除圖片區塊的「Images」標籤
 - [x] 修正圖片顯示不完整問題（上下裁剪，改用 object-contain）
 - [x] 將圖片區塊放大至原本的 1.7 倍，向右下方擴展（使用 CSS transform: scale(1.7)）
+
+
+## 首頁預覽圖片調整
+- [x] 縮減首頁預覽圖片大小至現在的 40%（使用 height: 240px 和 maxHeight: 40vh）
+- [x] 修正首頁預覽圖片上下不完整的裁剪問題（改用 object-contain）
