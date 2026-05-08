@@ -85,12 +85,13 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-gray-200 sticky top-0 z-50 bg-white">
         <div className="container py-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
+          <div className="flex items-start justify-between mb-6 gap-4">
+            <div className="flex-1">
               <h1 className="text-4xl font-light text-gray-900">{import.meta.env.VITE_APP_TITLE || "Annie's Blog"}</h1>
               <p className="text-gray-500 mt-2">{import.meta.env.VITE_APP_SUBTITLE || "A personal collection of thoughts and moments"}</p>
             </div>
-            <div className="flex gap-3">
+            {/* Desktop buttons */}
+            <div className="hidden md:flex gap-3 flex-shrink-0">
               {isAuthenticated && (
                 <>
                   <button
@@ -107,6 +108,29 @@ export default function Home() {
                 <button
                   onClick={() => (window.location.href = getLoginUrl())}
                   className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+                >
+                  Sign In
+                </button>
+              )}
+            </div>
+            {/* Mobile buttons - icon only */}
+            <div className="md:hidden flex flex-col gap-2 flex-shrink-0">
+              {isAuthenticated && (
+                <>
+                  <button
+                    onClick={() => setLocation("/admin")}
+                    className="p-2 border border-gray-300 rounded-lg text-gray-900 hover:bg-gray-50 transition-colors"
+                    title="New Post"
+                  >
+                    <Plus className="w-5 h-5" />
+                  </button>
+                  <MobileLogoutButton />
+                </>
+              )}
+              {!isAuthenticated && (
+                <button
+                  onClick={() => (window.location.href = getLoginUrl())}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
                 >
                   Sign In
                 </button>
@@ -312,6 +336,34 @@ function LogoutButton() {
     >
       <LogOut className="w-4 h-4" />
       {logout.isPending ? "Signing out..." : "Sign Out"}
+    </button>
+  );
+}
+
+function MobileLogoutButton() {
+  const logout = trpc.auth.logout.useMutation();
+  const utils = trpc.useUtils();
+  const [, setLocation] = useLocation();
+
+  const handleLogout = async () => {
+    try {
+      await logout.mutateAsync();
+      // Invalidate auth state to refresh UI
+      await utils.auth.me.invalidate();
+      setLocation("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  return (
+    <button
+      onClick={handleLogout}
+      disabled={logout.isPending}
+      className="p-2 border border-gray-300 rounded-lg text-gray-900 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      title="Sign Out"
+    >
+      <LogOut className="w-5 h-5" />
     </button>
   );
 }
