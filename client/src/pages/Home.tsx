@@ -238,9 +238,9 @@ export default function Home() {
               </div>            )}
             </main>
 
-            {/* Right Sidebar - Tags */}
+            {/* Right Sidebar - Tags - Hidden on mobile */}
             {displayTags.length > 0 && (
-              <aside className="w-64 flex-shrink-0 border-l border-gray-200 pl-4">
+              <aside className="hidden lg:block w-64 flex-shrink-0 border-l border-gray-200 pl-4">
                 <div className="sticky top-32">
                   <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">
                     Tags
