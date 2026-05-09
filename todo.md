@@ -131,3 +131,7 @@
 - [x] 重構作者頁面使用 PostPreviewImage 組件
 - [x] 重構月份存檔頁面使用 PostPreviewImage 組件
 - [x] 標籤頁面目前只顯示標籤列表，不需要修改
+
+
+## Bug 修復
+- [x] 修復 MonthArchive 頁面圖片無法顯示（屬性名稱從 url 改為 imageUrl）

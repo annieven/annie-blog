@@ -144,7 +144,7 @@ export default function MonthArchive() {
                 {/* Featured Image */}
                 {post.images && post.images.length > 0 && (
                   <PostPreviewImage
-                    src={post.images[0].url}
+                    src={post.images[0].imageUrl}
                     alt={post.title}
                   />
                 )}
