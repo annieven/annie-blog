@@ -135,3 +135,4 @@
 
 ## Bug 修復
 - [x] 修復 MonthArchive 頁面圖片無法顯示（屬性名稱從 url 改為 imageUrl）
+- [x] 修復路由衝突問題（/:year/:month 路由與 /authors/:authorId 路由衝突，導致作者頁面 404）

@@ -16,10 +16,10 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/posts/:id"} component={PostDetail} />
-      <Route path={"/authors/:authorId"} component={AuthorPage} />
-      <Route path={"/:year/:month"} component={MonthArchive} />
       <Route path={"/tags"} component={TagsPage} />
       <Route path={"/admin"} component={AdminDashboard} />
+      <Route path={"/authors/:authorId"} component={AuthorPage} />
+      <Route path={"/:year/:month"} component={MonthArchive} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
