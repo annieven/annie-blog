@@ -131,7 +131,23 @@ export default function PostDetail({ params }: PostDetailProps) {
               {/* Images Gallery */}
               {post.images && post.images.length > 0 && (
                 <div className="mb-12">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ transform: 'scale(1.7)', transformOrigin: 'top left', marginBottom: 'calc(1.7 * 100% - 100%)' }}>
+                  {/* Mobile version - full width */}
+                  <div className="md:hidden grid grid-cols-1 gap-6">
+                    {post.images.map((image) => (
+                      <div
+                        key={image.id}
+                        className="rounded-lg overflow-hidden bg-gray-100 w-screen ml-[calc(-50vw+50%)] mr-[calc(-50vw+50%)]"
+                      >
+                        <img
+                          src={image.imageUrl}
+                          alt="Post image"
+                          className="w-full h-auto object-contain"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  {/* Desktop version - scaled */}
+                  <div className="hidden md:grid grid-cols-1 md:grid-cols-2 gap-6" style={{ transform: 'scale(1.7)', transformOrigin: 'top left', marginBottom: 'calc(1.7 * 100% - 100%)' }}>
                     {post.images.map((image) => (
                       <div
                         key={image.id}

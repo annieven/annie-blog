@@ -136,3 +136,8 @@
 ## Bug 修復
 - [x] 修復 MonthArchive 頁面圖片無法顯示（屬性名稱從 url 改為 imageUrl）
 - [x] 修復路由衝突問題（/:year/:month 路由與 /authors/:authorId 路由衝突，導致作者頁面 404）
+
+
+## 手機模式圖片顯示調整
+- [x] 調整 PostDetail 頁面在手機模式下的圖片寬度，使其正好符合手機寬度（使用 w-screen 和 margin 調整）
+- [x] 確保電腦版圖片顯示不變（使用 hidden md:grid 隔離手機和電腦版本）
