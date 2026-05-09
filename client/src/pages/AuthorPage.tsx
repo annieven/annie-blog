@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Streamdown } from "streamdown";
+import { PostPreviewImage } from "@/components/PostPreviewImage";
 
 interface AuthorPageProps {
   params: {
@@ -88,13 +89,10 @@ export default function AuthorPage({ params }: AuthorPageProps) {
 
                 {/* Featured Image */}
                 {post.images && post.images.length > 0 && (
-                  <div className="mb-6 rounded-lg overflow-hidden bg-gray-100" style={{ height: '240px', maxHeight: '40vh', width: 'fit-content', marginLeft: '0' }}>
-                    <img
-                      src={post.images[0].imageUrl}
-                      alt={post.title}
-                      className="h-full object-contain"
-                    />
-                  </div>
+                  <PostPreviewImage
+                    src={post.images[0].imageUrl}
+                    alt={post.title}
+                  />
                 )}
 
                 {/* Tags */}

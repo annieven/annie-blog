@@ -1,6 +1,7 @@
 import { useParams, useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Loader2 } from "lucide-react";
+import { PostPreviewImage } from "@/components/PostPreviewImage";
 
 interface PostWithDetails {
   id: number;
@@ -142,13 +143,10 @@ export default function MonthArchive() {
 
                 {/* Featured Image */}
                 {post.images && post.images.length > 0 && (
-                  <div className="mb-6 aspect-video rounded-lg overflow-hidden bg-gray-100">
-                    <img
-                      src={post.images[0].url}
-                      alt={post.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+                  <PostPreviewImage
+                    src={post.images[0].url}
+                    alt={post.title}
+                  />
                 )}
 
                 {/* Tags */}
