@@ -125,7 +125,7 @@ export default function PostDetail({ params }: PostDetailProps) {
             <div className="lg:col-span-2">
               {/* Post Content */}
               <div className="prose prose-lg max-w-none mb-12 text-gray-700 leading-relaxed">
-                <Streamdown>{post.content}</Streamdown>
+                <Streamdown>{post.content.replace(/(?<!\n)\n(?!\n)/g, '  \n')}</Streamdown>
               </div>
 
               {/* Images Gallery */}

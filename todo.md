@@ -151,3 +151,7 @@
 ## 圖片寬度限制調整
 - [x] 調整 PostDetail 頁面的圖片寬度，限制在主文章區域內（移除 scale(1.7) 和 w-screen）
 - [x] 確保圖片不超過「Your Posts」欄位的左邊界（使用 max-w-full 和 overflow-hidden）
+
+
+## 文章內容換行問題修復
+- [x] 修正文章內容中單個換行符不顯示為換行的問題（使用 regex 將單個 \n 轉換為 Markdown 硬換行 '  \n'）
