@@ -131,12 +131,12 @@ export default function PostDetail({ params }: PostDetailProps) {
               {/* Images Gallery */}
               {post.images && post.images.length > 0 && (
                 <div className="mb-12">
-                  {/* Mobile version - full width */}
+                  {/* Mobile version - constrained width */}
                   <div className="md:hidden grid grid-cols-1 gap-6">
                     {post.images.map((image) => (
                       <div
                         key={image.id}
-                        className="rounded-lg overflow-hidden bg-gray-100 w-screen ml-[calc(-50vw+50%)] mr-[calc(-50vw+50%)]"
+                        className="rounded-lg overflow-hidden bg-gray-100 max-w-full"
                       >
                         <img
                           src={image.imageUrl}
@@ -146,12 +146,12 @@ export default function PostDetail({ params }: PostDetailProps) {
                       </div>
                     ))}
                   </div>
-                  {/* Desktop version - scaled */}
-                  <div className="hidden md:grid grid-cols-1 gap-6" style={{ transform: 'scale(1.7)', transformOrigin: 'top left', marginBottom: 'calc(1.7 * 100% - 100%)' }}>
+                  {/* Desktop version - constrained, no scale overflow */}
+                  <div className="hidden md:grid grid-cols-1 gap-6 max-w-full overflow-hidden">
                     {post.images.map((image) => (
                       <div
                         key={image.id}
-                        className="rounded-lg overflow-hidden bg-gray-100"
+                        className="rounded-lg overflow-hidden bg-gray-100 max-w-full"
                       >
                         <img
                           src={image.imageUrl}

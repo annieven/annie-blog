@@ -146,3 +146,8 @@
 ## 圖片版面調整（多張圖片）
 - [x] 調整 PostDetail 頁面的圖片版面，改爲直式一次一張圖片
 - [x] 移除圖片的橫向並排顯示（從 md:grid-cols-2 改爲 grid-cols-1）
+
+
+## 圖片寬度限制調整
+- [x] 調整 PostDetail 頁面的圖片寬度，限制在主文章區域內（移除 scale(1.7) 和 w-screen）
+- [x] 確保圖片不超過「Your Posts」欄位的左邊界（使用 max-w-full 和 overflow-hidden）
