@@ -147,7 +147,7 @@ export default function PostDetail({ params }: PostDetailProps) {
                     ))}
                   </div>
                   {/* Desktop version - scaled */}
-                  <div className="hidden md:grid grid-cols-1 md:grid-cols-2 gap-6" style={{ transform: 'scale(1.7)', transformOrigin: 'top left', marginBottom: 'calc(1.7 * 100% - 100%)' }}>
+                  <div className="hidden md:grid grid-cols-1 gap-6" style={{ transform: 'scale(1.7)', transformOrigin: 'top left', marginBottom: 'calc(1.7 * 100% - 100%)' }}>
                     {post.images.map((image) => (
                       <div
                         key={image.id}
