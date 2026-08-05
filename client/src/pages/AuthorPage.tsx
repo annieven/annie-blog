@@ -52,7 +52,7 @@ export default function AuthorPage({ params }: AuthorPageProps) {
       </header>
 
       {/* Main Content */}
-      <main className="container py-12 max-w-3xl">
+      <main className="container py-12">
         {posts.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-gray-500 text-lg">No articles from this author</p>
