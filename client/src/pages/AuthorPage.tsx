@@ -34,6 +34,12 @@ export default function AuthorPage({ params }: AuthorPageProps) {
       {/* Header */}
       <header className="border-b border-gray-200">
         <div className="container py-8">
+          <h2
+            className="text-2xl font-light text-gray-900 cursor-pointer hover:opacity-70 transition-opacity mb-4"
+            onClick={() => setLocation("/")}
+          >
+            {import.meta.env.VITE_APP_TITLE || "Pensieve"}
+          </h2>
           <Button
             onClick={() => setLocation("/")}
             variant="ghost"

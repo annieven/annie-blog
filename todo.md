@@ -159,3 +159,12 @@
 
 ## 作者頁面版面對齊調整
 - [x] 調整作者頁面貼文文字左側對齊標題左側（移除 max-w-3xl，使用 container 對齊）
+
+
+## 標題點擊導航
+- [x] 點擊網站標題「Pensieve」時導航到首頁（在所有頁面 header 添加可點擊的網站標題）
+- [x] 首頁 Home.tsx 標題可點擊
+- [x] PostDetail.tsx 添加網站標題
+- [x] MonthArchive.tsx 添加網站標題
+- [x] AuthorPage.tsx 添加網站標題
+- [x] TagsPage.tsx 添加網站標題

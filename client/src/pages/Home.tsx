@@ -88,7 +88,7 @@ export default function Home() {
         <div className="container py-8">
           <div className="flex items-start justify-between mb-6 gap-4">
             <div className="flex-1">
-              <h1 className="text-4xl font-light text-gray-900">{import.meta.env.VITE_APP_TITLE || "Annie's Blog"}</h1>
+              <h1 className="text-4xl font-light text-gray-900 cursor-pointer hover:opacity-70 transition-opacity" onClick={() => setLocation("/")}>{import.meta.env.VITE_APP_TITLE || "Annie's Blog"}</h1>
               <p className="text-gray-500 mt-2">{import.meta.env.VITE_APP_SUBTITLE || "A personal collection of thoughts and moments"}</p>
             </div>
             {/* Desktop buttons */}
