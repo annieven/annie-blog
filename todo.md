@@ -168,3 +168,9 @@
 - [x] MonthArchive.tsx 添加網站標題
 - [x] AuthorPage.tsx 添加網站標題
 - [x] TagsPage.tsx 添加網站標題
+
+
+## Markdown/純文字 顯示模式切換
+- [x] 在 PostDetail 頁面添加 Markdown/純文字 顯示模式切換開關
+- [x] 純文字模式：直接顯示原始文字，保留所有字元（如 <iostream>、# 等）
+- [x] Markdown 模式：使用 Streamdown 渲染 Markdown 格式（預設）

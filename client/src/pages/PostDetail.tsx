@@ -1,4 +1,5 @@
 import { useLocation } from "wouter";
+import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ interface PostDetailProps {
 export default function PostDetail({ params }: PostDetailProps) {
   const [, setLocation] = useLocation();
   const { user } = useAuth();
+  const [isPlainText, setIsPlainText] = useState(false);
   const postId = parseInt(params.id);
 
   const { data: post, isLoading } = trpc.posts.getById.useQuery({ id: postId });
@@ -130,9 +132,37 @@ export default function PostDetail({ params }: PostDetailProps) {
             {/* Main Article */}
             <div className="lg:col-span-2">
               {/* Post Content */}
-              <div className="prose prose-lg max-w-none mb-12 text-gray-700 leading-relaxed">
-                <Streamdown>{post.content.replace(/(?<!\n)\n(?!\n)/g, '  \n')}</Streamdown>
+              <div className="flex items-center gap-3 mb-4">
+                <button
+                  onClick={() => setIsPlainText(false)}
+                  className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                    !isPlainText
+                      ? "bg-gray-900 text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  Markdown
+                </button>
+                <button
+                  onClick={() => setIsPlainText(true)}
+                  className={`px-3 py-1 text-sm rounded-md transition-colors ${
+                    isPlainText
+                      ? "bg-gray-900 text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  Plain Text
+                </button>
               </div>
+              {isPlainText ? (
+                <div className="max-w-none mb-12 text-gray-700 leading-relaxed whitespace-pre-wrap font-mono text-sm bg-gray-50 p-6 rounded-lg border border-gray-200">
+                  {post.content}
+                </div>
+              ) : (
+                <div className="prose prose-lg max-w-none mb-12 text-gray-700 leading-relaxed">
+                  <Streamdown>{post.content.replace(/(?<!\n)\n(?!\n)/g, '  \n')}</Streamdown>
+                </div>
+              )}
 
               {/* Images Gallery */}
               {post.images && post.images.length > 0 && (
