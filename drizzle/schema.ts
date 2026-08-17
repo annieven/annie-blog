@@ -32,6 +32,7 @@ export const posts = mysqlTable("posts", {
   id: int("id").autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
   content: text("content").notNull(),
+  contentDisplayMode: mysqlEnum("contentDisplayMode", ["markdown", "plain"]).notNull().default("markdown"),
   authorId: int("authorId").notNull(),
   viewCount: int("viewCount").notNull().default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

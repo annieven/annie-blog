@@ -74,6 +74,7 @@ describe("posts router", () => {
       const result = await caller.posts.create({
         title: "Test Post",
         content: "This is a test post",
+        contentDisplayMode: "plain",
         tags: ["#test", "#demo"],
       });
 
@@ -130,6 +131,7 @@ describe("posts router", () => {
       expect(getResult).toBeDefined();
       expect(getResult?.title).toBe("Test Post");
       expect(getResult?.content).toBe("This is a test post");
+      expect(getResult?.contentDisplayMode).toBe("markdown");
       expect(getResult?.tags).toContain("#test");
     });
 
@@ -158,6 +160,7 @@ describe("posts router", () => {
         id: createResult.id,
         title: "Updated Title",
         content: "Updated content",
+        contentDisplayMode: "plain",
       });
 
       expect(updateResult.success).toBe(true);
@@ -166,6 +169,7 @@ describe("posts router", () => {
       const getResult = await caller.posts.getById({ id: createResult.id });
       expect(getResult?.title).toBe("Updated Title");
       expect(getResult?.content).toBe("Updated content");
+      expect(getResult?.contentDisplayMode).toBe("plain");
     });
 
     it("should fail to update post by non-author", async () => {

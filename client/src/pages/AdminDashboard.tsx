@@ -24,6 +24,7 @@ export default function AdminDashboard() {
   // Form state
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [contentDisplayMode, setContentDisplayMode] = useState<"markdown" | "plain">("markdown");
   const [tags, setTags] = useState("");
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,6 +72,7 @@ export default function AdminDashboard() {
       setEditingPostId(postToEdit.id);
       setTitle(postToEdit.title);
       setContent(postToEdit.content);
+      setContentDisplayMode(postToEdit.contentDisplayMode || "markdown");
       setTags(postToEdit.tags?.join(", ") || "");
       setUploadedImages(
         postToEdit.images?.map((img) => ({
@@ -144,6 +146,7 @@ export default function AdminDashboard() {
           id: editingPostId,
           title,
           content,
+          contentDisplayMode,
           tags: tagArray,
         });
         toast.success("Post updated successfully");
@@ -151,6 +154,7 @@ export default function AdminDashboard() {
         const result = await createPostMutation.mutateAsync({
           title,
           content,
+          contentDisplayMode,
           tags: tagArray,
         });
         setEditingPostId(result.id);
@@ -161,6 +165,7 @@ export default function AdminDashboard() {
       // Reset form
       setTitle("");
       setContent("");
+      setContentDisplayMode("markdown");
       setTags("");
       setUploadedImages([]);
       setEditingPostId(null);
@@ -265,20 +270,61 @@ export default function AdminDashboard() {
                 {/* Content */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Content (Markdown supported)
+                    Content
                   </label>
                   <Textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    placeholder="Write your post content here... Markdown syntax supported."
+                    placeholder="Write your post content here..."
                     className="w-full min-h-64 font-mono text-sm"
                   />
+                  <fieldset className="mt-4">
+                    <legend className="text-sm font-medium text-gray-700 mb-2">
+                      Display mode
+                    </legend>
+                    <div className="flex flex-wrap gap-3">
+                      <label className={`flex items-start gap-2 rounded-lg border p-3 cursor-pointer transition-colors ${contentDisplayMode === "markdown" ? "border-gray-900 bg-gray-50" : "border-gray-200 hover:bg-gray-50"}`}>
+                        <input
+                          type="radio"
+                          name="content-display-mode"
+                          value="markdown"
+                          checked={contentDisplayMode === "markdown"}
+                          onChange={() => setContentDisplayMode("markdown")}
+                          className="mt-1"
+                        />
+                        <span>
+                          <span className="block text-sm font-medium text-gray-900">Markdown</span>
+                          <span className="block text-xs text-gray-500 mt-1">Render headings, lists, links, and other Markdown syntax.</span>
+                        </span>
+                      </label>
+                      <label className={`flex items-start gap-2 rounded-lg border p-3 cursor-pointer transition-colors ${contentDisplayMode === "plain" ? "border-gray-900 bg-gray-50" : "border-gray-200 hover:bg-gray-50"}`}>
+                        <input
+                          type="radio"
+                          name="content-display-mode"
+                          value="plain"
+                          checked={contentDisplayMode === "plain"}
+                          onChange={() => setContentDisplayMode("plain")}
+                          className="mt-1"
+                        />
+                        <span>
+                          <span className="block text-sm font-medium text-gray-900">Plain Text</span>
+                          <span className="block text-xs text-gray-500 mt-1">Keep original characters and line breaks, ideal for code or commands.</span>
+                        </span>
+                      </label>
+                    </div>
+                  </fieldset>
                   {content && (
                     <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
                       <p className="text-xs font-medium text-gray-600 mb-3">Preview:</p>
-                      <div className="prose prose-sm max-w-none text-gray-700">
-                        <Streamdown>{content}</Streamdown>
-                      </div>
+                      {contentDisplayMode === "plain" ? (
+                        <div className="text-sm text-gray-700 whitespace-pre-wrap font-mono">
+                          {content}
+                        </div>
+                      ) : (
+                        <div className="prose prose-sm max-w-none text-gray-700">
+                          <Streamdown>{content}</Streamdown>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -379,6 +425,7 @@ export default function AdminDashboard() {
                         setEditingPostId(null);
                         setTitle("");
                         setContent("");
+                        setContentDisplayMode("markdown");
                         setTags("");
                         setUploadedImages([]);
                         setLocation("/admin");

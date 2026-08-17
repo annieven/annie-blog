@@ -167,6 +167,7 @@ export const appRouter = router({
         z.object({
           title: z.string().min(1),
           content: z.string().min(1),
+          contentDisplayMode: z.enum(["markdown", "plain"]).default("markdown"),
           tags: z.array(z.string()).optional(),
         })
       )
@@ -174,6 +175,7 @@ export const appRouter = router({
         const result = await createPost({
           title: input.title,
           content: input.content,
+          contentDisplayMode: input.contentDisplayMode,
           authorId: ctx.user.id,
         });
         
@@ -200,6 +202,7 @@ export const appRouter = router({
           id: z.number(),
           title: z.string().min(1).optional(),
           content: z.string().min(1).optional(),
+          contentDisplayMode: z.enum(["markdown", "plain"]).optional(),
           tags: z.array(z.string()).optional(),
         })
       )
@@ -209,10 +212,11 @@ export const appRouter = router({
         if (post.authorId !== ctx.user.id) throw new Error("Unauthorized");
         
         // Update post content
-        if (input.title || input.content) {
+        if (input.title || input.content || input.contentDisplayMode) {
           await updatePost(input.id, {
             title: input.title,
             content: input.content,
+            contentDisplayMode: input.contentDisplayMode,
           });
         }
         

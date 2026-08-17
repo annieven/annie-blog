@@ -1,0 +1,1 @@
+ALTER TABLE `posts` ADD `contentDisplayMode` enum('markdown','plain') DEFAULT 'markdown' NOT NULL;
