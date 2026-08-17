@@ -230,10 +230,10 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Post Preview */}
-                  <div className="mb-6 text-gray-700 line-clamp-3 leading-relaxed">
-                    <p>{post.content.substring(0, 200) + (post.content.length > 200 ? "..." : "")}</p>
-                  </div>
+                 {/* Post Preview */}
+                  <div className="mb-6 text-gray-700 line-clamp-5 leading-relaxed whitespace-pre-wrap">
+                    {post.content.substring(0, 300) + (post.content.length > 300 ? "..." : "")}
+                 </div>
 
                   {/* Featured Image */}
                   {post.images && post.images.length > 0 && (

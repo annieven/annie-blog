@@ -174,3 +174,7 @@
 - [x] 在 PostDetail 頁面添加 Markdown/純文字 顯示模式切換開關
 - [x] 純文字模式：直接顯示原始文字，保留所有字元（如 <iostream>、# 等）
 - [x] Markdown 模式：使用 Streamdown 渲染 Markdown 格式（預設）
+
+
+## 首頁預覽文字換行
+- [x] 修改首頁預覽文字，保留正確換行顯示（使用 whitespace-pre-wrap，增加 line-clamp-5）
